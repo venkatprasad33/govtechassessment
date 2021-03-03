@@ -9,9 +9,3 @@ $ python3 demo.py --type data --csv restaurants_data.csv
 ```
 $ python3 demo.py --type events --csv restaurants_events.csv
 ```
-
-#### Setup AWS Lambda
-```
-$ terraform plan -out=mylambda.plan
-$ terraform apply mylambda.plan
-```
