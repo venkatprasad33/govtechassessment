@@ -23,8 +23,8 @@ class Govtech(object):
         
         if location:
             address = location.raw['address']
-            shelf[country_id] = address.get('country', '')
-            return address.get('country', '')
+            if address.get('country'): shelf[country_id] = address.get('country', 'NA')
+            return address.get('country', 'NA')
         
         return 'NA'
 
@@ -104,8 +104,8 @@ class Govtech(object):
 
             if restaurants_data:
                 print("Total restaurants: {0}".format(len(restaurants_data)))
-                print("Event ID,Restauntant ID,Restauntant Name,Photo Url,Event Title,Event Start Date,Event End Date")
-                restaurants_csv.append("Event ID,Restauntant ID,Restauntant Name,Photo Url,Event Title,Event Start Date,Event End Date"
+                print("Event ID,Restauntant ID,Restauntant Name,Event Title,Event Start Date,Event End Date,Photo Url")
+                restaurants_csv.append("Event ID,Restauntant ID,Restauntant Name,Event Title,Event Start Date,Event End Date,Photo Url"
                     .split(","))
 
                 for rd in restaurants_data:
@@ -125,32 +125,33 @@ class Govtech(object):
                                     for p in e["event"]["photos"]:
                                         photos.append(p["photo"]["url"])
                                         # print("photo url: ", p["photo"]["url"])
+                                    
                                     photostr = " ".join(photos)
                                     if len(photos) == 0:
                                         photostr = "NA"
-
+                                    
+                                    start_date = datetime.strptime(e["event"]["start_date"], "%Y-%m-%d")
+                                    end_date = datetime.strptime(e["event"]["end_date"], "%Y-%m-%d")
+                                    
                                     if start_date.year == 2017 and start_date.month == 4 and end_date.year == 2017 and end_date.month == 4:
                                         print("{0},{1},{2},{3},{4},{5},{6}".format(
                                             e["event"]["event_id"],
                                             restaurant["id"],
                                             restaurant["name"],
-                                            photostr,
                                             e["event"]["title"],
                                             e["event"]["start_date"],
-                                            e["event"]["end_date"]
+                                            e["event"]["end_date"],
+                                            photostr
                                         ))
-
-                                        start_date = datetime.strptime(e["event"]["start_date"], "%Y-%m-%d")
-                                        end_date = datetime.strptime(e["event"]["end_date"], "%Y-%m-%d")
-                                    
+                                        
                                         restaurants_csv.append([
                                             e["event"]["event_id"],
                                             restaurant["id"],
                                             restaurant["name"],
-                                            photostr,
                                             e["event"]["title"],
                                             e["event"]["start_date"],
-                                            e["event"]["end_date"]
+                                            e["event"]["end_date"],
+                                            photostr
                                         ])
             else:
                 print(response.text)
