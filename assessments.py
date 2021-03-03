@@ -147,7 +147,7 @@ class Govtech(object):
                                             e["event"]["event_id"],
                                             restaurant["id"],
                                             restaurant["name"],
-                                            " ".join(photos),
+                                            photostr,
                                             e["event"]["title"],
                                             e["event"]["start_date"],
                                             e["event"]["end_date"]
