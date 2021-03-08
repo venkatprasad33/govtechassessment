@@ -9,3 +9,8 @@ $ python3 demo.py --type data --csv restaurants_data.csv
 ```
 $ python3 demo.py --type events --csv restaurants_events.csv
 ```
+
+#### Determine the threshold for the different rating_text based on aggregate_rating
+```
+$ python3 analyze.py
+```

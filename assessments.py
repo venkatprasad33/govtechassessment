@@ -153,11 +153,52 @@ class Govtech(object):
                                             e["event"]["end_date"],
                                             photostr
                                         ])
-            else:
-                print(response.text)
             
             return restaurants_csv
 
-    def run(self):
-        # self.__get_country_name("28.5542851000", "77.1944706000")
-        pass
+    def analyze(self):
+        """
+        analyze() rating text
+        """
+        aggr_map = {}
+        with open(self.restaurant_json_file, "r") as jf:
+            restaurants_data = json.load(jf)
+
+            if restaurants_data:
+                print("Total restaurants: {0}".format(len(restaurants_data)))
+
+                for rd in restaurants_data:
+                    if "restaurants" in rd:
+                        restaurants = rd["restaurants"]
+                        
+                        for r in restaurants:
+                            restaurant = r["restaurant"]
+                            
+                            # print(restaurant)
+
+                            rating_text = restaurant["user_rating"]["rating_text"]
+
+                            aggr_rating = restaurant["user_rating"]["aggregate_rating"]
+
+                            if rating_text in aggr_map:
+                                aggr_ratings = aggr_map[rating_text]
+                                aggr_ratings.append(aggr_rating)
+                                aggr_map[rating_text] = aggr_ratings
+                            else:
+                                aggr_map[rating_text] = [aggr_rating]
+
+        print("Ratings aggregate:")
+        
+        # print("aggr_map: ", aggr_map)
+        
+        for rating in aggr_map:
+            aggr_values = aggr_map[rating]
+            
+            aggr_length = len(aggr_values)
+            
+            aggr_sum = 0
+            for i in aggr_values:
+                aggr_sum += float(i)
+            
+            aggr_rate = aggr_sum * 100 / (aggr_length * 100)
+            print(rating,":", aggr_rate)
